@@ -21,7 +21,6 @@ export default function Navbar() {
     <header className="font-georgia sticky top-0 z-50 h-20 bg-white shadow">
       <nav className="relative mx-auto flex h-20 max-w-6xl justify-between px-5 py-2">
         <Link to="/" className="flex h-full w-max items-center">
-          {/* <img src="/logo.png" className="md:h-full md:min-w-max" alt="logo" /> */}
           <img
             src="/logo.png"
             className="block h-full w-auto object-contain"
