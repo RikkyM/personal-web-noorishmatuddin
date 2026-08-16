@@ -6,10 +6,10 @@ const MainLayout = () => {
   const outlet = useOutlet();
 
   return (
-    <section className="min-h-screen">
+    <>
       <Navbar />
       <main className="font-georgia">{outlet}</main>
-    </section>
+    </>
   );
 };
 

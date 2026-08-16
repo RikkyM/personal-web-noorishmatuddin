@@ -18,13 +18,18 @@ const navigations = [
 
 export default function Navbar() {
   return (
-    <header className="h-20 bg-white shadow font-georgia sticky top-0 z-50">
-      <nav className="flex justify-between h-full px-5 py-2 max-w-6xl mx-auto">
-        <Link to="/">
-          <img src="/logo.png" className="h-full min-w-max" alt="logo" />
+    <header className="font-georgia sticky top-0 z-50 h-20 bg-white shadow">
+      <nav className="relative mx-auto flex h-20 max-w-6xl justify-between px-5 py-2">
+        <Link to="/" className="flex h-full w-max items-center">
+          {/* <img src="/logo.png" className="md:h-full md:min-w-max" alt="logo" /> */}
+          <img
+            src="/logo.png"
+            className="block h-full w-auto object-contain"
+            alt="logo"
+          />
         </Link>
         <div className="flex items-center">
-          <ul className="flex items-center gap-5 text-lg text-[#9C0707] hidden md:flex">
+          <ul className="flex hidden items-center gap-5 text-lg text-[#9C0707] md:flex">
             {navigations.map((nav) => (
               <li key={nav.label}>
                 <Link to={nav.url}>{nav.label}</Link>
@@ -33,7 +38,7 @@ export default function Navbar() {
             <li>
               <button
                 type="button"
-                className="bg-[#9C0707] text-white px-3 py-1 rounded-lg"
+                className="rounded-lg bg-[#9C0707] px-3 py-1 text-white"
               >
                 Kirim Aspirasi
               </button>
@@ -41,7 +46,7 @@ export default function Navbar() {
           </ul>
           <button
             type="button"
-            className="md:hidden cursor-pointer transition-colors duration-200 hover:bg-gray-300 h-max w-max p-1 rounded"
+            className="h-max w-max cursor-pointer rounded p-1 transition-colors duration-200 hover:bg-gray-300 md:hidden"
           >
             <Menu />
           </button>
