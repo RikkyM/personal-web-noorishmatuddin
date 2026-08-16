@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import '@fontsource/noto-sans-georgian';
+@import "@fontsource/noto-sans-georgian";
 
 @theme {
   --font-sans:
@@ -14,5 +14,15 @@ body {
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
+  }
+}
+
+@keyframes indicator {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(400%);
   }
 }

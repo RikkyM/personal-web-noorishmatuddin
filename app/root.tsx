@@ -9,6 +9,7 @@ import {
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Loader2 } from "lucide-react";
 import React from "react";
 import type { Route } from "./+types/root";
 import { createQueryClient } from "./lib/query-client";
@@ -50,6 +51,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+export function HydrateFallback() {
+  return (
+    <section className="grid h-dvh place-content-center">
+      <Loader2 className="size-20 animate-spin" />
+    </section>
+  );
+}
+
 export default function App() {
   const [queryClient] = React.useState(() => createQueryClient());
 
@@ -78,11 +87,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main className="container mx-auto p-4 pt-16">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
+        <pre className="w-full overflow-x-auto p-4">
           <code>{stack}</code>
         </pre>
       )}

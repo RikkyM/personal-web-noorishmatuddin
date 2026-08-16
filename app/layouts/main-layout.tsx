@@ -6,10 +6,10 @@ const MainLayout = () => {
   const outlet = useOutlet();
 
   return (
-    <>
+    <section className="relative h-dvh min-h-dvh scrollbar-thin overflow-auto">
       <Navbar />
       <main className="font-georgia">{outlet}</main>
-    </>
+    </section>
   );
 };
 

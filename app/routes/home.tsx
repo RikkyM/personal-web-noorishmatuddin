@@ -3,10 +3,6 @@ import { fetchHome } from "~/features/homepage/api";
 import { cn } from "~/lib/utils";
 import type { Route } from "./+types/home";
 
-export async function loader() {
-  return await fetchHome();
-}
-
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Noor Ishmatuddin, S.I.P. - Bersama Membangun Banyuasin" },
@@ -17,18 +13,17 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+export async function loader() {
+  return await fetchHome();
+}
+
 export default function Home() {
   const data = useLoaderData<typeof loader>();
-
-  // const { data } = useQuery({
-  //   queryKey: ["homepage"],
-  //   queryFn: fetchHome,
-  // });
 
   return (
     <>
       <section
-        className={`relative h-[calc(100dvh-80px)] min-h-185 overflow-hidden bg-black/80 bg-cover bg-center`}
+        className={`relative h-[calc(100dvh-80px)] min-h-160 overflow-hidden bg-black/80 bg-cover bg-center md:min-h-160`}
         style={{
           backgroundImage: `url(${data?.heroBanner?.link})`,
         }}
@@ -36,7 +31,7 @@ export default function Home() {
         <img
           src={data?.heroImage?.link}
           alt={data?.hero_title}
-          className="absolute inset-x-0 -bottom-32 mx-auto h-170 object-cover object-center md:-bottom-20 md:h-150 lg:h-180"
+          className="absolute inset-x-0 -bottom-32 mx-auto h-160 object-cover object-center md:-bottom-20 md:h-150 lg:h-180"
         />
         <div className="relative z-10 mx-auto flex h-full max-w-6xl">
           <div
@@ -74,10 +69,35 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <div>asdasd</div>
-        <div>asdasd</div>
-        <div className="md:col-span-2 lg:col-span-1">asdasd</div>
+      <section className="grid grid-cols-1 *:min-h-32 md:grid-cols-2 lg:grid-cols-3">
+        {(
+          [
+            {
+              image: data.sub_hero_1,
+              title: data.sub_hero_1_title,
+              subtitle: data.sub_hero_1_subtitle,
+            },
+            {
+              image: data.sub_hero_2,
+              title: data?.sub_hero_2_title,
+              subtitle: data?.sub_hero_2_subtitle,
+            },
+          ] as const
+        ).map((item) => (
+          <div
+            className="bg-gray-500 bg-cover bg-center p-5 text-pretty text-white"
+            style={{ backgroundImage: `url(${item?.image?.link})` }}
+            
+          >
+            {console.log(item)}
+            <h2 className="font-bold">{item.title}</h2>
+            <p className="text-sm">{item.subtitle}</p>
+          </div>
+        ))}
+
+        <div className="bg-[#9C0707] p-5 md:col-span-2 lg:col-span-1">
+          asdasd
+        </div>
       </section>
     </>
   );
