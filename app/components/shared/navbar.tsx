@@ -41,7 +41,6 @@ export default function Navbar() {
         <nav className="relative mx-auto flex h-20 max-w-6xl justify-between px-5 py-2">
           <Link
             to="/"
-            viewTransition
             className="flex h-full w-max items-center"
           >
             <img
