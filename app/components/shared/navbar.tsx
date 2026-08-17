@@ -35,7 +35,7 @@ export default function Navbar() {
       <header className="font-georgia sticky top-0 z-20 h-20 bg-white shadow">
         {isNavigate && (
           <div className="absolute top-0 left-0 h-0.5 w-full overflow-hidden">
-            <div className="h-full w-1/3 animate-[indicator_1.5s_ease-in-out_infinite] bg-[#9C0707]" />
+            <div className="h-full w-1/3 animate-[indicator_1.5s_ease-in-out_infinite] bg-[#840000]" />
           </div>
         )}
         <nav className="relative mx-auto flex h-20 max-w-6xl justify-between px-5 py-2">
@@ -51,7 +51,7 @@ export default function Navbar() {
             />
           </Link>
           <div className="flex items-center">
-            <ul className="flex hidden items-center gap-5 text-lg text-[#9C0707] md:flex">
+            <ul className="flex hidden items-center gap-5 text-lg text-[#840000] md:flex">
               {navigations.map((nav) => (
                 <li key={nav.label}>
                   <Link to={nav.url}>{nav.label}</Link>
@@ -60,7 +60,7 @@ export default function Navbar() {
               <li>
                 <button
                   type="button"
-                  className="rounded-full text-sm bg-[#9C0707] px-4 py-1 text-white"
+                  className="rounded-full bg-[#840000] px-4 py-1.5 text-sm text-white"
                 >
                   Kirim Aspirasi
                 </button>
@@ -96,7 +96,7 @@ export default function Navbar() {
                 }
                 refs.current = false;
               }}
-              className="fixed inset-0 z-30 p-5"
+              className="fixed inset-0 z-30 p-5 md:hidden"
             >
               <motion.div
                 initial={{ opacity: 0, translateY: "25px" }}
@@ -124,19 +124,23 @@ export default function Navbar() {
                   {navigations.map((nav, index) => (
                     <motion.li
                       key={nav.label}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{
-                        duration: 0.25,
-                        delay: index * 0.1,
+                      initial={{ filter: "blur(5px)", y: 10 }}
+                      animate={{
+                        filter: "blur(0px)",
+                        y: 0,
+                        transition: { duration: 0.25, delay: index * 0.15 },
+                      }}
+                      exit={{
+                        filter: "blur(5px)",
+                        y: 10,
+                        transition: { duration: 0.12, delay: 0 },
                       }}
                       onClick={() => setOpen(false)}
                       className="relative"
                     >
                       <Link
                         to={nav.url}
-                        className="flex items-center justify-between text-[#9C0707] hover:underline"
+                        className="flex items-center justify-between text-[#840000] hover:underline"
                       >
                         <nav.icon className="size-5" />
                         <span>{nav.label}</span>
