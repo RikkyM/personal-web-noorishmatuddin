@@ -1,5 +1,7 @@
+import { ArrowRight } from "lucide-react";
 import { Link, useLoaderData } from "react-router";
 import { fetchHome } from "~/features/homepage/api";
+import { socials } from "~/features/homepage/socials";
 import { cn } from "~/lib/utils";
 import type { Route } from "./+types/home";
 
@@ -70,7 +72,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {(
           [
             {
@@ -88,7 +90,7 @@ export default function Home() {
           return (
             <div
               key={index}
-              className="relative min-h-55 md:min-h-65.5 flex items-center justify-center overflow-hidden p-5 text-pretty text-white md:justify-start"
+              className="relative flex min-h-55 items-center justify-center overflow-hidden p-5 text-pretty text-white md:min-h-65.5 md:justify-start"
               // style={{ backgroundImage: `url(${item?.image?.link})` }}
             >
               <div
@@ -110,9 +112,9 @@ export default function Home() {
           );
         })}
 
-        <div className="flex min-h-55 md:min-h-45.5 items-center justify-center overflow-hidden bg-[#840000] p-5 text-pretty text-white sm:col-span-2 md:justify-start lg:col-span-1">
-          <div className="relative grid sm:grid-cols-2 lg:grid-cols-1 gap-2">
-            <h2 className="text-lg font-bold sm:text-center sm:self-center lg:self-start lg:text-left">
+        <div className="flex min-h-55 items-center justify-center overflow-hidden bg-[#840000] p-5 text-pretty text-white sm:col-span-2 md:min-h-45.5 md:justify-start lg:col-span-1">
+          <div className="relative grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+            <h2 className="text-lg font-bold sm:self-center sm:text-center lg:self-start lg:text-left">
               {/* Mari Bergabung Menjadi Relawan Noor Ishmatuddin */}
               {data.sub_hero_3_title}
             </h2>
@@ -123,7 +125,7 @@ export default function Home() {
             </p>
             <button
               type="button"
-              className="relative mt-4 sm:m-auto lg:m-0 w-max cursor-pointer rounded border-2 border-[#FFCC00] px-5 py-2 text-sm shadow"
+              className="relative mt-4 w-max cursor-pointer rounded border-2 border-[#FFCC00] px-5 py-2 text-sm shadow sm:m-auto lg:m-0"
             >
               Bergabung
             </button>
@@ -179,16 +181,62 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="bg-[#840000] py-14 md:py-20 overflow-hidden px-5 px-5">
-        <div className="mx-auto flex max-w-6xl flex-col md:flex-row gap-8 md:gap-4">
-          <div className="text-white flex-1">
-            <div className="max-w-110 mx-auto md:mx-0">
-              <h2 className="text-3xl font-semibold text-center md:text-left md:max-w-72">SEKILAS PARTAI GERINDRA</h2>
-              <div className="h-0.5 bg-white w-72 mx-auto md:mx-0 rounded-full mt-4 mb-8 lg:my-12" />
-              <p className="text-sm md:text-base text-pretty text-center md:text-left">
-                Partai GERINDRA adalah Partai Nasionalis-Religius, Partai Terbuka,
-                Partai Tengah, Partai yang menjunjung tinggi Pluralisme dan partai
-                yang peduli pada Rakyat Kecil.
+      {/* Section-Sosmed */}
+      <section className="bg-white pt-10 lg:pt-5 lg:pb-20">
+        <div className="mx-auto max-w-6xl space-y-5 lg:px-5">
+          <h1 className="text-center text-lg font-bold md:text-2xl lg:text-left lg:text-4xl">
+            Terhubung dengan Noor
+          </h1>
+          <div className="grid bg-gray-500 sm:grid-cols-2 lg:grid-cols-4">
+            {socials.map((item) => {
+              const { icon, image, label, url } = item;
+              return (
+                <a
+                  key={label}
+                  href={url}
+                  target="_blank"
+                  className="group relative flex min-h-40 md:min-h-44 lg:aspect-4/3"
+                >
+                  {image && (
+                    <img
+                      src={image}
+                      alt={label.toLowerCase()}
+                      className="absolute inset-0 h-full w-full object-cover object-[40%_0] grayscale-100 transition-[filter] duration-250 group-hover:grayscale-0 lg:object-center"
+                    />
+                  )}
+                  <div className="flex w-full items-end justify-between p-3 font-medium text-white">
+                    <div className="relative flex items-center gap-3">
+                      <img
+                        src={icon}
+                        alt={label.toLowerCase()}
+                        className="w-6 rounded-full bg-white grayscale-100 transition-[filter] duration-150 duration-250 group-hover:grayscale-0"
+                      />
+                      <h2 className="text-shadow-gray-600 text-shadow-md">
+                        {label}
+                      </h2>
+                    </div>
+                    <ArrowRight />
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+      {/* End-Section-Sosmed */}
+
+      <section className="overflow-hidden bg-[#840000] px-5 py-14 md:py-20">
+        <div className="mx-auto flex max-w-6xl touch-pan-y flex-col gap-8 md:flex-row md:gap-4">
+          <div className="flex-1 text-white">
+            <div className="mx-auto max-w-110 md:mx-0">
+              <h2 className="text-center text-3xl font-semibold md:max-w-72 md:text-left">
+                SEKILAS PARTAI GERINDRA
+              </h2>
+              <div className="mx-auto mt-4 mb-8 h-0.5 w-72 rounded-full bg-white md:mx-0 lg:my-12" />
+              <p className="text-center text-sm text-pretty md:text-left md:text-base">
+                Partai GERINDRA adalah Partai Nasionalis-Religius, Partai
+                Terbuka, Partai Tengah, Partai yang menjunjung tinggi Pluralisme
+                dan partai yang peduli pada Rakyat Kecil.
               </p>
             </div>
           </div>
