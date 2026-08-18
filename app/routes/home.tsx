@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Link, useLoaderData } from "react-router";
 import { fetchHome } from "~/features/homepage/api";
 import { socials } from "~/features/homepage/socials";
+import { fetchSiteSettings } from "~/features/settings/api";
 import { cn } from "~/lib/utils";
 import type { Route } from "./+types/home";
 
@@ -16,11 +17,23 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader() {
-  return await fetchHome();
+  const [home, settings] = await Promise.all([
+    fetchHome(),
+    fetchSiteSettings(),
+  ]);
+
+  return {
+    home,
+    settings,
+  };
 }
 
 export default function Home() {
-  const data = useLoaderData<typeof loader>();
+  const initialData = useLoaderData<typeof loader>();
+
+  const { home: data, settings } = initialData;
+
+  const socialMedia = settings?.social_media;
 
   return (
     <>
@@ -182,33 +195,37 @@ export default function Home() {
         </div>
       </section>
       {/* Section-Sosmed */}
-      <section className="bg-white pt-10 lg:pt-5 lg:pb-20">
+      <section className="l g:pt-5 bg-white pt-10 lg:pb-20">
         <div className="mx-auto max-w-6xl space-y-5 lg:px-5">
           <h1 className="text-center text-lg font-bold md:text-2xl lg:text-left lg:text-4xl">
             Terhubung dengan Noor
           </h1>
           <div className="grid bg-gray-500 sm:grid-cols-2 lg:grid-cols-4">
             {socials.map((item) => {
-              const { icon, image, label, url } = item;
+              const social = socialMedia[item.key];
+
+              const { key, icon, label } = item;
+              const { url, image } = social;
+
               return (
                 <a
-                  key={label}
+                  key={key}
                   href={url}
                   target="_blank"
-                  className="group relative flex min-h-40 md:min-h-44 lg:aspect-4/3"
+                  className="group relative flex min-h-40 overflow-hidden select-none md:min-h-44 lg:aspect-4/3"
                 >
                   {image && (
                     <img
                       src={image}
-                      alt={label.toLowerCase()}
-                      className="absolute inset-0 h-full w-full object-cover object-[40%_0] grayscale-100 transition-[filter] duration-250 group-hover:grayscale-0 lg:object-center"
+                      alt={label}
+                      className="absolute inset-0 h-full w-full object-cover object-center grayscale-100 transition-[scale,filter] duration-250 group-hover:scale-105 group-hover:grayscale-0 lg:object-center"
                     />
                   )}
                   <div className="flex w-full items-end justify-between p-3 font-medium text-white">
                     <div className="relative flex items-center gap-3">
-                      <img
-                        src={icon}
-                        alt={label.toLowerCase()}
+                      <object
+                        data={icon}
+                        type="image/svg+xml"
                         className="w-6 rounded-full bg-white grayscale-100 transition-[filter] duration-150 duration-250 group-hover:grayscale-0"
                       />
                       <h2 className="text-shadow-gray-600 text-shadow-md">
@@ -244,7 +261,7 @@ export default function Home() {
             <iframe
               // width="570"
               // height="321"
-              className="aspect-video"
+              className="mx-auto aspect-video max-h-72 md:mx-0 md:max-h-max"
               src="https://www.youtube.com/embed/-ezWF-LO8Zo"
               title="Mars Gerindra"
               frameBorder="0"
@@ -252,6 +269,54 @@ export default function Home() {
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             />
+          </div>
+        </div>
+      </section>
+
+      <section className="overflow-hidden bg-white py-14 md:px-5 md:py-20">
+        <div className="mx-auto max-w-6xl space-y-5">
+          <div className="text-center md:text-left">
+            <h1 className="text-lg font-semibold text-[#840000]">
+              Kegiatan Saya
+            </h1>
+            <p className="text-xl font-bold md:text-3xl">
+              Ikuti terus kegiatan Saya disini
+            </p>
+            <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-[#840000] md:mx-0" />
+          </div>
+          <div className="grid md:grid-cols-2 md:gap-5">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Link
+                key={i}
+                to="/"
+                className="flex min-h-44 items-end bg-gray-500 md:aspect-square"
+              >
+                <div className="px-5 py-5 text-white">
+                  <button
+                    type="button"
+                    className="mb-2 bg-[#840000] px-3 py-1.5 text-xs font-medium text-white"
+                  >
+                    Kategori
+                  </button>
+                  <h2 className="mb-3 font-bold text-pretty md:text-xl">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Impedit.
+                  </h2>
+                  <p className="text-xs text-pretty md:text-sm">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad,
+                    repudiandae!
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="flex justify-center md:justify-start">
+            <Link
+              to="/kegiatan"
+              className="w-max bg-[#0a0a0a] px-5 py-3 text-xs font-bold text-white md:mx-0 md:text-sm"
+            >
+              Lihat Lebih Lanjut
+            </Link>
           </div>
         </div>
       </section>

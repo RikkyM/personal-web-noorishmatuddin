@@ -4,35 +4,40 @@ import tiktokIcon from "~/assets/icons/tiktok.svg";
 import youtubeIcon from "~/assets/icons/youtube.svg";
 
 type SocialType = {
+  key: string;
   icon: string;
   label: string;
-  url: string;
-  image?: string;
+  //   url: string;
+  //   image?: string;
 };
 
 export const socials: SocialType[] = [
   {
+    key: "facebook",
     icon: facebookIcon,
     label: "Facebook",
-    url: "https://web.facebook.com/noorishmatuddinsyarifudin",
-    image: "/facebook.jpg",
+    // url: "https://facebook.com/noorishmatuddinsyarifudin",
+    // image: "/facebook.jpg",
   },
   {
+    key: "instagram",
     icon: instagramIcon,
     label: "Instagram",
-    url: "https://www.instagram.com/noorishmatuddin_/",
-    image: "/instagram.jpg",
+    // url: "https://www.instagram.com/noorishmatuddin_/",
+    // image: "/instagram.jpg",
   },
   {
+    key: "tiktok",
     icon: tiktokIcon,
     label: "Tiktok",
-    url: "https://www.tiktok.com/@noorishmatuddin",
-    image: "/tiktok.jpg",
+    // url: "https://www.tiktok.com/@noorishmatuddin",
+    // image: "/tiktok.jpg",
   },
   {
+    key: "youtube",
     icon: youtubeIcon,
     label: "Youtube",
-    url: "https://www.youtube.com/@noorishmatuddin",
-    image: "/youtube.jpg",
+    // url: "https://www.youtube.com/@noorishmatuddin",
+    // image: "/youtube.jpg",
   },
 ] as const;
