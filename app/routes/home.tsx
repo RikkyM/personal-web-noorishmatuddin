@@ -362,7 +362,7 @@ export default function Home() {
           <div className="flex justify-center md:justify-start">
             <Link
               to="/kegiatan"
-              className="w-max bg-[#0a0a0a] px-5 py-3 text-xs font-bold text-white md:mx-0 md:text-sm"
+              className="w-max bg-[#0a0a0a] px-5 py-3 text-xs font-bold text-white md:mx-0 md:text-sm whitespace-nowrap"
             >
               Lihat Lebih Lanjut
             </Link>
