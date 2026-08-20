@@ -35,6 +35,8 @@ export default function Home() {
 
   const socialMedia = settings?.social_media;
 
+  // console.log(data.news);
+
   return (
     <>
       <section
@@ -174,16 +176,13 @@ export default function Home() {
               </h4>
             </div>
             <p className="text-sm text-pretty text-wrap text-gray-500">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur
-              eaque, ullam suscipit deleniti molestias pariatur. Doloremque,
-              sed. Ipsam suscipit culpa alias recusandae necessitatibus dolorum
-              quasi doloribus iure reprehenderit corrupti quae commodi explicabo
-              laboriosam, nesciunt sapiente dolore blanditiis, repellendus
-              ratione magnam. Cum quam exercitationem quidem laudantium ducimus
-              labore repudiandae neque. Ut, possimus ea! Voluptatem tempore qui
-              vitae aliquam corporis iusto sunt cum, tenetur consequuntur vero
-              autem dicta quasi earum. Maxime facilis minima praesentium dolores
-              numquam animi aut commodi esse, obcaecati voluptatum.
+              {/* Noor Ishmatuddin, S.I.P. (lahir di Betung, Kabupaten Banyuasin, 22
+              April 1997) adalah seorang politisi muda Indonesia yang berasal
+              dari Provinsi Sumatera Selatan. Ia dikenal sebagai sosok generasi
+              muda yang visioner, dekat dengan masyarakat, dan berkomitmen kuat
+              terhadap pembangunan daerah berbasis nilai, integritas, dan
+              keberpihakan pada rakyat kecil. */}
+              {data?.profile_singkat}
             </p>
             <Link
               to="/profil"
@@ -197,7 +196,7 @@ export default function Home() {
       {/* Section-Sosmed */}
       <section className="l g:pt-5 bg-white pt-10 lg:pb-20">
         <div className="mx-auto max-w-6xl space-y-5 lg:px-5">
-          <h1 className="text-center text-lg font-bold md:text-2xl lg:text-left lg:text-4xl">
+          <h1 className="text-center text-lg font-bold text-black md:text-2xl lg:text-left lg:text-4xl">
             Terhubung dengan Noor
           </h1>
           <div className="grid bg-gray-500 sm:grid-cols-2 lg:grid-cols-4">
@@ -279,13 +278,14 @@ export default function Home() {
             <h1 className="text-lg font-semibold text-[#840000]">
               Kegiatan Saya
             </h1>
-            <p className="text-xl font-bold md:text-3xl">
+            <p className="text-xl font-bold text-black md:text-3xl">
               Ikuti terus kegiatan Saya disini
             </p>
             <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-[#840000] md:mx-0" />
           </div>
           <div className="grid md:grid-cols-2 md:gap-5">
-            {Array.from({ length: 4 }).map((_, i) => (
+            {/* {console.log()} */}
+            {/* {data?.news.map((new, i) => (
               <Link
                 key={i}
                 to="/"
@@ -308,7 +308,56 @@ export default function Home() {
                   </p>
                 </div>
               </Link>
-            ))}
+            ))} */}
+            {data?.news.map((item, i) => {
+              const category = item._embedded?.["wp:term"]
+                ?.flat()
+                .find((term) => term.taxonomy === "category");
+
+                // console.log(item)
+                // console.log([
+                //   ...item.content.rendered.matchAll(
+                //     /<img[^>]+src=["']([^"']+)["']/g,
+                //   ),
+                // ]);
+
+              return (
+                <Link
+                  key={i}
+                  to="/"
+                  className="relative flex min-h-44 items-end bg-gray-500 md:aspect-square"
+                >
+                  <img
+                    src={
+                      item.content.rendered.match(
+                        /<img[^>]+src=["']([^"']+)["']/,
+                      )?.[1]
+                    }
+                    alt="image"
+                    className="absolute object-cover object-center inset-0 h-full w-full brightness-65"
+                  />
+                  <div className="px-5 py-5 text-white relative">
+                    <button
+                      type="button"
+                      className="mb-2 bg-[#840000] px-3 py-1.5 text-xs font-medium text-white"
+                    >
+                      {category.name}
+                    </button>
+                    <h2 className="mb-3 font-bold text-pretty text-white md:text-xl">
+                      {/* Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Impedit. */}
+                      {/* {console.log(item)} */}
+                      {item?.title?.rendered}
+                    </h2>
+                    <p className="text-xs text-pretty md:text-sm">
+                      {/* Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Ad, repudiandae! */}
+                      {item?.title?.rendered}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
           <div className="flex justify-center md:justify-start">
             <Link

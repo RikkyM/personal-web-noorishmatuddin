@@ -39,10 +39,7 @@ export default function Navbar() {
           </div>
         )}
         <nav className="relative mx-auto flex h-20 max-w-6xl justify-between px-5 py-2">
-          <Link
-            to="/"
-            className="flex h-full w-max items-center"
-          >
+          <Link to="/" className="flex h-full w-max items-center">
             <img
               src="/logo.png"
               className="block h-full w-auto object-contain"
@@ -67,7 +64,7 @@ export default function Navbar() {
             </ul>
             <button
               type="button"
-              className="block h-max w-max cursor-pointer rounded p-1 transition-colors duration-200 hover:bg-gray-300 md:hidden"
+              className="block h-max w-max cursor-pointer rounded p-1 text-black transition-colors duration-200 hover:bg-gray-300 md:hidden"
               onClick={() => {
                 setOpen((prev) => !prev);
               }}
@@ -114,7 +111,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="cursor-pointer rounded transition-colors duration-200 hover:bg-gray-300"
+                    className="cursor-pointer rounded text-black transition-colors duration-200 hover:bg-gray-300"
                   >
                     <X />
                   </button>

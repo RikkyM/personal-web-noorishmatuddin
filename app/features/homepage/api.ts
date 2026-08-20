@@ -2,6 +2,7 @@ import { wpFetch } from "~/lib/api/client";
 
 export async function fetchHome() {
   const [page] = await wpFetch<any[]>("/pages?slug=home");
+  const news = await wpFetch<any[]>("/posts?per_page=4&orderBy=date&order=desc&_embed")
 
   const [heroImage, heroBanner, subHero1, subHero2] = await Promise.all([
     page.acf.hero_image ? wpFetch(`/media/${page.acf.hero_image}`) : null,
@@ -10,5 +11,5 @@ export async function fetchHome() {
     page.acf.sub_hero_2 ? wpFetch(`/media/${page.acf.sub_hero_2}`) : null,
   ]);
 
-  return { ...page.acf, heroImage, heroBanner, subHero1, subHero2 };
+  return { ...page.acf, heroImage, heroBanner, subHero1, subHero2, news };
 }

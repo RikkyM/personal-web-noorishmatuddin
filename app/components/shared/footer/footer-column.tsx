@@ -9,7 +9,7 @@ type Props = {
 
 export default function FooterColumn({ title, items }: Props) {
   return (
-    <div className="">
+    <div className="text-black">
       <h1
         className={cn(
           "relative text-2xl font-medium capitalize",
