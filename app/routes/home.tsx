@@ -35,8 +35,6 @@ export default function Home() {
 
   const socialMedia = settings?.social_media;
 
-  // console.log(data.news);
-
   return (
     <>
       <section
@@ -106,7 +104,6 @@ export default function Home() {
             <div
               key={index}
               className="relative flex min-h-55 items-center justify-center overflow-hidden p-5 text-pretty text-white md:min-h-65.5 md:justify-start"
-              // style={{ backgroundImage: `url(${item?.image?.link})` }}
             >
               <div
                 className="absolute inset-0 bg-cover bg-center grayscale-100"
@@ -130,12 +127,9 @@ export default function Home() {
         <div className="flex min-h-55 items-center justify-center overflow-hidden bg-[#840000] p-5 text-pretty text-white sm:col-span-2 md:min-h-45.5 md:justify-start lg:col-span-1">
           <div className="relative grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
             <h2 className="text-lg font-bold sm:self-center sm:text-center lg:self-start lg:text-left">
-              {/* Mari Bergabung Menjadi Relawan Noor Ishmatuddin */}
               {data.sub_hero_3_title}
             </h2>
             <p className="max-w-md text-xs md:text-sm">
-              {/* Lebih dekat dengan Noor Ishmatuddin, Buka Peluang Usaha dan
-              lapangan kerja */}
               {data.sub_hero_3_subtitle}
             </p>
             <button
@@ -168,20 +162,13 @@ export default function Home() {
                   "relative w-max text-center text-lg font-semibold text-[#840000] md:text-3xl",
                 )}
               >
-                {/* Noor Ishmatuddin, S.IP */}
                 {data?.hero_title}
               </h1>
-              <h4 className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500">
                 WAKIL KETUA DPRD BANYUASIN
-              </h4>
+              </p>
             </div>
             <p className="text-sm text-pretty text-wrap text-gray-500">
-              {/* Noor Ishmatuddin, S.I.P. (lahir di Betung, Kabupaten Banyuasin, 22
-              April 1997) adalah seorang politisi muda Indonesia yang berasal
-              dari Provinsi Sumatera Selatan. Ia dikenal sebagai sosok generasi
-              muda yang visioner, dekat dengan masyarakat, dan berkomitmen kuat
-              terhadap pembangunan daerah berbasis nilai, integritas, dan
-              keberpihakan pada rakyat kecil. */}
               {data?.profile_singkat}
             </p>
             <Link
@@ -203,7 +190,7 @@ export default function Home() {
             {socials.map((item) => {
               const social = socialMedia[item.key];
 
-              const { key, icon, label } = item;
+              const { key, icon: Icon, label } = item;
               const { url, image } = social;
 
               return (
@@ -222,9 +209,9 @@ export default function Home() {
                   )}
                   <div className="flex w-full items-end justify-between p-3 font-medium text-white">
                     <div className="relative flex items-center gap-3">
-                      <object
-                        data={icon}
-                        type="image/svg+xml"
+                      <Icon
+                        // data={icon}
+                        // type="image/svg+xml"
                         className="w-6 rounded-full bg-white grayscale-100 transition-[filter] duration-150 duration-250 group-hover:grayscale-0"
                       />
                       <h2 className="text-shadow-gray-600 text-shadow-md">
@@ -314,12 +301,12 @@ export default function Home() {
                 ?.flat()
                 .find((term) => term.taxonomy === "category");
 
-                // console.log(item)
-                // console.log([
-                //   ...item.content.rendered.matchAll(
-                //     /<img[^>]+src=["']([^"']+)["']/g,
-                //   ),
-                // ]);
+              // console.log(item)
+              // console.log([
+              //   ...item.content.rendered.matchAll(
+              //     /<img[^>]+src=["']([^"']+)["']/g,
+              //   ),
+              // ]);
 
               return (
                 <Link
@@ -334,9 +321,9 @@ export default function Home() {
                       )?.[1]
                     }
                     alt="image"
-                    className="absolute object-cover object-center inset-0 h-full w-full brightness-65"
+                    className="absolute inset-0 h-full w-full object-cover object-center brightness-65"
                   />
-                  <div className="px-5 py-5 text-white relative">
+                  <div className="relative px-5 py-5 text-white">
                     <button
                       type="button"
                       className="mb-2 bg-[#840000] px-3 py-1.5 text-xs font-medium text-white"
@@ -362,7 +349,7 @@ export default function Home() {
           <div className="flex justify-center md:justify-start">
             <Link
               to="/kegiatan"
-              className="w-max bg-[#0a0a0a] px-5 py-3 text-xs font-bold text-white md:mx-0 md:text-sm whitespace-nowrap"
+              className="w-max bg-[#0a0a0a] px-5 py-3 text-xs font-bold whitespace-nowrap text-white md:mx-0 md:text-sm"
             >
               Lihat Lebih Lanjut
             </Link>

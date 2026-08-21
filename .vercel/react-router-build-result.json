@@ -12,7 +12,7 @@
     "routeIdToServerBundleId": {
       "root": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/home": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
-      "routes/profile": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0"
+      "routes/not-found": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0"
     },
     "routes": {
       "root": {
@@ -36,11 +36,11 @@
         "index": true,
         "config": {}
       },
-      "routes/profile": {
-        "id": "routes/profile",
+      "routes/not-found": {
+        "id": "routes/not-found",
         "parentId": "layouts/main-layout",
-        "file": "app/routes/profile.tsx",
-        "path": "profil",
+        "file": "app/routes/not-found.tsx",
+        "path": "*",
         "config": {}
       }
     }
@@ -70,11 +70,11 @@
         "file": "routes/home.tsx",
         "index": true
       },
-      "routes/profile": {
-        "id": "routes/profile",
+      "routes/not-found": {
+        "id": "routes/not-found",
         "parentId": "layouts/main-layout",
-        "file": "routes/profile.tsx",
-        "path": "profil"
+        "file": "routes/not-found.tsx",
+        "path": "*"
       }
     },
     "routeDiscovery": {
@@ -101,8 +101,8 @@
                 "index": true
               },
               {
-                "file": "routes/profile.tsx",
-                "path": "profil"
+                "file": "routes/not-found.tsx",
+                "path": "*"
               }
             ]
           }

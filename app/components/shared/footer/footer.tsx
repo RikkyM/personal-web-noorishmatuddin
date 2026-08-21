@@ -50,7 +50,7 @@ export default function Footer() {
       <section className="border-t border-gray-400 bg-[#0a0a0a] py-3 text-center text-sm text-white">
         <p>
           ©2026{" "}
-          <a href="https://noorishmatuddin.com/" className="text-red-600">
+          <a href="https://noorishmatuddin.com/" className="text-red-500">
             noorishmatuddin.com
           </a>{" "}
           All rights reserved
