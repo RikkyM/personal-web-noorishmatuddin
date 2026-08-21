@@ -5,15 +5,20 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "react-router";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import React from "react";
 import type { Route } from "./+types/root";
+import { fetchSiteSettings } from "./features/settings/api";
 import { createQueryClient } from "./lib/query-client";
 import "./styles/global.css";
+
+dayjs.locale("id");
 
 export const links: Route.LinksFunction = () => [
   // { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -51,6 +56,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+export async function loader() {
+  const settings = await fetchSiteSettings();
+  return { settings };
+}
+
 export function HydrateFallback() {
   return (
     <section className="grid h-dvh place-content-center">
@@ -61,10 +71,11 @@ export function HydrateFallback() {
 
 export default function App() {
   const [queryClient] = React.useState(() => createQueryClient());
+  const { settings } = useLoaderData<typeof loader>();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <Outlet context={{ settings }} />
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
     </QueryClientProvider>
   );

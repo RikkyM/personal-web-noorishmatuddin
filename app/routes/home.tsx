@@ -1,9 +1,10 @@
 import { ArrowRight } from "lucide-react";
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useRouteLoaderData } from "react-router";
 import { fetchHome } from "~/features/homepage/api";
 import { socials } from "~/features/homepage/socials";
-import { fetchSiteSettings } from "~/features/settings/api";
+import type { News } from "~/features/news/types";
 import { cn } from "~/lib/utils";
+import type { loader as rootLoader } from "~/root";
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -11,27 +12,26 @@ export function meta({}: Route.MetaArgs) {
     { title: "Noor Ishmatuddin, S.I.P. - Bersama Membangun Banyuasin" },
     {
       name: "description",
-      content: "Noor Ishmatuddin",
+      content:
+        "Noor Ishmatuddin, S.I.P. — Wakil Ketua DPRD Banyuasin. Bersama membangun Banyuasin melalui program dan kegiatan untuk masyarakat.",
     },
   ];
 }
 
 export async function loader() {
-  const [home, settings] = await Promise.all([
-    fetchHome(),
-    fetchSiteSettings(),
-  ]);
+  const home = await fetchHome();
 
   return {
     home,
-    settings,
   };
 }
 
 export default function Home() {
   const initialData = useLoaderData<typeof loader>();
+  const rootData = useRouteLoaderData<typeof rootLoader>("root");
 
-  const { home: data, settings } = initialData;
+  const data = initialData?.home;
+  const settings = rootData?.settings;
 
   const socialMedia = settings?.social_media;
 
@@ -184,7 +184,7 @@ export default function Home() {
       <section className="l g:pt-5 bg-white pt-10 lg:pb-20">
         <div className="mx-auto max-w-6xl space-y-5 lg:px-5">
           <h1 className="text-center text-lg font-bold text-black md:text-2xl lg:text-left lg:text-4xl">
-            Terhubung dengan Noor
+            Terhubung dengan Saya
           </h1>
           <div className="grid bg-gray-500 sm:grid-cols-2 lg:grid-cols-4">
             {socials.map((item) => {
@@ -271,47 +271,15 @@ export default function Home() {
             <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-[#840000] md:mx-0" />
           </div>
           <div className="grid md:grid-cols-2 md:gap-5">
-            {/* {console.log()} */}
-            {/* {data?.news.map((new, i) => (
-              <Link
-                key={i}
-                to="/"
-                className="flex min-h-44 items-end bg-gray-500 md:aspect-square"
-              >
-                <div className="px-5 py-5 text-white">
-                  <button
-                    type="button"
-                    className="mb-2 bg-[#840000] px-3 py-1.5 text-xs font-medium text-white"
-                  >
-                    Kategori
-                  </button>
-                  <h2 className="mb-3 font-bold text-pretty md:text-xl">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Impedit.
-                  </h2>
-                  <p className="text-xs text-pretty md:text-sm">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad,
-                    repudiandae!
-                  </p>
-                </div>
-              </Link>
-            ))} */}
-            {data?.news.map((item, i) => {
+            {data?.news.map((item: News, i: number) => {
               const category = item._embedded?.["wp:term"]
                 ?.flat()
                 .find((term) => term.taxonomy === "category");
 
-              // console.log(item)
-              // console.log([
-              //   ...item.content.rendered.matchAll(
-              //     /<img[^>]+src=["']([^"']+)["']/g,
-              //   ),
-              // ]);
-
               return (
                 <Link
                   key={i}
-                  to="/"
+                  to={`/kegiatan/${item.slug}`}
                   className="relative flex min-h-44 items-end bg-gray-500 md:aspect-square"
                 >
                   <img
@@ -328,17 +296,12 @@ export default function Home() {
                       type="button"
                       className="mb-2 bg-[#840000] px-3 py-1.5 text-xs font-medium text-white"
                     >
-                      {category.name}
+                      {category?.name ?? "-"}
                     </button>
                     <h2 className="mb-3 font-bold text-pretty text-white md:text-xl">
-                      {/* Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Impedit. */}
-                      {/* {console.log(item)} */}
                       {item?.title?.rendered}
                     </h2>
                     <p className="text-xs text-pretty md:text-sm">
-                      {/* Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Ad, repudiandae! */}
                       {item?.title?.rendered}
                     </p>
                   </div>
