@@ -10,7 +10,6 @@ import {
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import React from "react";
 import type { Route } from "./+types/root";
@@ -18,7 +17,11 @@ import { fetchSiteSettings } from "./features/settings/api";
 import { createQueryClient } from "./lib/query-client";
 import "./styles/global.css";
 
+import dayjs from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime'
+
 dayjs.locale("id");
+dayjs.extend(relativeTime)
 
 export const links: Route.LinksFunction = () => [
   // { rel: "preconnect", href: "https://fonts.googleapis.com" },
