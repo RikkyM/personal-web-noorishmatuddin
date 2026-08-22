@@ -94,6 +94,7 @@ export default function kegiatan() {
                 htmlFor="kategori"
                 className="relative w-full flex-1 border border-gray-400"
               >
+                <span className="sr-only">Kategori</span>
                 <select
                   name="kategori"
                   id="kategori"
@@ -177,7 +178,7 @@ export default function kegiatan() {
 
               return (
                 <div key={item.id} className="border border-gray-300 shadow">
-                  <div>
+                  <div className="bg-gray-400">
                     {imageUrl ? (
                       <img
                         src={imageUrl}
@@ -215,7 +216,7 @@ export default function kegiatan() {
                       dangerouslySetInnerHTML={{
                         __html: item.excerpt.rendered,
                       }}
-                      className="mt-1.5 line-clamp-4 text-sm text-pretty text-gray-500 md:mt-2"
+                      className="mt-1.5 line-clamp-4 text-sm text-pretty text-gray-600 md:mt-2"
                     />
                   </div>
                 </div>
@@ -232,7 +233,7 @@ export default function kegiatan() {
                   "flex items-center rounded pl-1 pr-2 py-0.5 text-sm transition-colors duration-250 md:text-base",
                   page > 1
                     ? "text-black hover:bg-gray-300"
-                    : "cursor-default text-gray-400",
+                    : "cursor-default text-gray-500",
                 )}
               >
                 <ChevronLeft className="size-5 min-w-5" />
@@ -247,7 +248,7 @@ export default function kegiatan() {
                   "flex items-center rounded pl-2 pr-1 py-0.5 text-sm transition-colors duration-250 md:text-base",
                   page < totalPages
                     ? "text-black hover:bg-gray-300"
-                    : "cursor-default text-gray-400",
+                    : "cursor-default text-gray-500",
                 )}
               >
                 {page < totalPages ? (
