@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
-import { ChevronDown, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import React from "react";
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useSearchParams } from "react-router";
 import BgImage from "~/assets/images/kegiatan.jpg";
+import Pagination from "~/components/shared/pagination";
 import type { News } from "~/features/news/types";
-import { wpFetchWithMeta } from "~/lib/api/client";
-import { cn } from "~/lib/utils";
+import { wpFetch, wpFetchWithMeta } from "~/lib/api/client";
 import type { Route } from "./+types/kegiatan";
 
 export function meta({}: Route.MetaArgs) {
@@ -23,25 +23,51 @@ export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
 
   const page = Number(url.searchParams.get("page") ?? 1);
-  const perPage = 6;
+  const perPage = Number(url.searchParams.get("per_page") ?? 6);
 
-  const result = await wpFetchWithMeta<any[]>(
-    `/posts?per_page=${perPage}&page=${page}&orderby=date&order=desc&categories_exclude=1&_embed`,
-  );
+  const search = url.searchParams.get("q") ?? "";
+  const kategori = url.searchParams.get("kategori") ?? "";
+  const dateFrom = url.searchParams.get("from") ?? "";
+  const dateTo = url.searchParams.get("to") ?? "";
+
+  const params = new URLSearchParams({
+    search,
+    per_page: String(perPage),
+    page: String(page),
+    orderby: "date",
+    order: "desc",
+    categories_exclude: "1",
+    _embed: "",
+  });
+
+  if (kategori) {
+    params.set("categories", kategori);
+  }
+
+  if (dateFrom) {
+    params.set("after", `${dateFrom}T00:00:00`);
+  }
+
+  if (dateTo) {
+    params.set("before", `${dateTo}T23:59:59`);
+  }
+
+  const result = await wpFetchWithMeta<any[]>(`/posts?${params.toString()}`);
+  const categories = await wpFetch<any[]>("/categories?exclude=1");
 
   return {
     ...result,
     page,
     perPage,
+    categories,
   };
 }
 
 export default function kegiatan() {
-  const { data, page, perPage, total, totalPages } =
+  const { data, page, total, totalPages, categories } =
     useLoaderData<typeof loader>();
 
-  const start = (page - 1) * perPage + 1;
-  const end = Math.min(page * perPage, total);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [filters, setFilters] = React.useState<{
     search: string;
@@ -49,16 +75,62 @@ export default function kegiatan() {
     date_from: string;
     date_to: string;
   }>({
-    search: "",
+    search: searchParams.get("q") ?? "",
     kategori: "",
     date_from: "",
     date_to: "",
   });
 
+  const dataFilter =
+    searchParams.get("q") ||
+    searchParams.get("kategori") ||
+    searchParams.get("from") ||
+    searchParams.get("to");
+
   const dateFromRef = React.useRef<HTMLInputElement | null>(null);
   const dateToRef = React.useRef<HTMLInputElement | null>(null);
   const openDatePicker = (ref: React.RefObject<HTMLInputElement | null>) => {
     ref.current?.showPicker();
+  };
+
+  React.useEffect(() => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+
+      if (filters.date_from && filters.date_to) {
+        next.set("from", filters.date_from);
+        next.set("to", filters.date_to);
+      } else {
+        next.delete("from");
+        next.delete("to");
+      }
+      next.delete("page");
+
+      return next;
+    });
+  }, [filters.date_from, filters.date_to, setSearchParams]);
+
+  const clearFilters = () => {
+    if (dateFromRef.current) dateFromRef.current.value = "";
+    if (dateToRef.current) dateToRef.current.value = "";
+
+    setFilters({
+      search: "",
+      kategori: "",
+      date_from: "",
+      date_to: "",
+    });
+
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.delete("q");
+      next.delete("kategori");
+      next.delete("from");
+      next.delete("to");
+      next.delete("page");
+      next.delete("per_page");
+      return next;
+    });
   };
 
   return (
@@ -77,18 +149,91 @@ export default function kegiatan() {
       <section className="overflow-hidden bg-white">
         <section className="mx-auto max-w-6xl space-y-3 px-3 py-10 text-sm md:px-5 md:text-base">
           <div className="flex flex-col gap-2.5">
-            <label
-              htmlFor="search"
-              className="flex items-center gap-2 border border-gray-400 pl-1.5"
-            >
-              <Search className="size-5 min-w-5 stroke-2 text-black" />
-              <input
-                type="text"
-                id="search"
-                placeholder="Cari Kegiatan..."
-                className="flex-1 py-1.5 pr-1.5 text-black outline-none placeholder:text-gray-400"
-              />
-            </label>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-black">Show:</span>
+                <label
+                  htmlFor="per_page"
+                  className="flex items-center gap-2 border border-gray-400 p-1.5 select-none"
+                >
+                  <span className="sr-only">Per Page</span>
+                  <select
+                    name="per_page"
+                    id="per_page"
+                    className="appearance-none text-center outline-none"
+                    value={searchParams.get("per_page") ?? "6"}
+                    onChange={(e) => {
+                      setSearchParams((prev) => {
+                        const value = e.target.value;
+                        const next = new URLSearchParams(prev);
+
+                        if (value === "6") {
+                          next.delete("per_page");
+                        } else {
+                          next.set("per_page", e.target.value);
+                        }
+
+                        next.delete("page");
+
+                        return next;
+                      });
+                    }}
+                  >
+                    <option value="3">3</option>
+                    <option value="6">6</option>
+                    <option value="9">9</option>
+                    <option value="12">12</option>
+                  </select>
+                </label>
+              </div>
+              <label
+                htmlFor="search"
+                className="relative flex w-full flex-1 items-center gap-2 overflow-clip border border-gray-400 pl-1.5"
+              >
+                <Search className="size-5 min-w-5 stroke-2 text-black" />
+                <input
+                  type="text"
+                  id="search"
+                  placeholder="Cari Kegiatan..."
+                  className="w-max flex-1 py-1.5 text-black outline-none placeholder:text-gray-400"
+                  value={filters.search ?? ""}
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, search: e.target.value }))
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      setSearchParams((prev) => {
+                        const next = new URLSearchParams(prev);
+                        if (filters.search !== "") {
+                          next.set("q", filters.search);
+                        } else {
+                          next.delete("q");
+                        }
+                        next.delete("page");
+                        return next;
+                      });
+                    }
+                  }}
+                />
+                {filters.search && (
+                  <button
+                    type="button"
+                    className="h-full cursor-pointer bg-[#840000] px-2 py-1.5 text-white"
+                    onClick={() => {
+                      setSearchParams((prev) => {
+                        const next = new URLSearchParams(prev);
+                        next.set("q", filters.search);
+                        next.delete("page");
+                        return next;
+                      });
+                    }}
+                  >
+                    Cari
+                  </button>
+                )}
+              </label>
+            </div>
             <div className="flex flex-1 flex-col items-center gap-2 md:flex-row">
               <label
                 htmlFor="kategori"
@@ -99,13 +244,29 @@ export default function kegiatan() {
                   name="kategori"
                   id="kategori"
                   className="w-full appearance-none p-1.5 text-black outline-none"
+                  onChange={(e) => {
+                    setSearchParams((prev) => {
+                      const value = e.target.value;
+                      const next = new URLSearchParams(prev);
+                      if (value !== "") {
+                        next.set("kategori", e.target.value);
+                      } else {
+                        next.delete("kategori");
+                      }
+                      next.delete("page");
+                      return next;
+                    });
+                  }}
                 >
                   <option value="">Pilih Kategori</option>
+                  {categories.map((category) => (
+                    <option value={category.id}>{category?.name}</option>
+                  ))}
                 </select>
                 <ChevronDown className="pointer-events-none absolute top-1/2 right-1.5 size-5 min-w-5 -translate-y-1/2 text-black" />
               </label>
-              <div className="flex w-full flex-1 flex-wrap items-center gap-2 whitespace-nowrap *:flex-1">
-                <label htmlFor="date_from" className="w-full">
+              <div className="flex w-full flex-1 flex-wrap items-center gap-2 whitespace-nowrap *:w-full *:flex-1 *:overflow-clip">
+                <label htmlFor="date_from">
                   <button
                     type="button"
                     onClick={() => openDatePicker(dateFromRef)}
@@ -122,17 +283,17 @@ export default function kegiatan() {
                     ref={dateFromRef}
                     type="date"
                     id="date_from"
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setFilters((prev) => ({
                         ...prev,
                         date_from: e.target.value,
-                      }))
-                    }
-                    max={filters.date_from || undefined}
+                      }));
+                    }}
+                    max={filters.date_to || undefined}
                     className="sr-only"
                   />
                 </label>
-                <label htmlFor="date_to" className="w-full">
+                <label htmlFor="date_to">
                   <button
                     type="button"
                     onClick={() => openDatePicker(dateToRef)}
@@ -161,9 +322,21 @@ export default function kegiatan() {
                 </label>
               </div>
             </div>
+            {(searchParams.get("q") ||
+              searchParams.get("kategori") ||
+              searchParams.get("from") ||
+              searchParams.get("to")) && (
+              <button
+                type="button"
+                className="w-max cursor-pointer bg-red-600 px-2 py-1 text-sm text-white"
+                onClick={() => clearFilters()}
+              >
+                Bersihkan Filter
+              </button>
+            )}
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {data.map((item: News, i) => {
+            {data.map((item: News) => {
               const featuredImage =
                 item._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
               const category = item._embedded?.["wp:term"]
@@ -201,10 +374,13 @@ export default function kegiatan() {
                       title={item.title.rendered}
                     />
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="w-max bg-[#840000] px-3 py-1.5 text-xs text-white">
+                      <Link
+                        to={`?kategori=${category?.id}`}
+                        className="w-max bg-[#840000] px-3 py-1.5 text-xs text-white"
+                      >
                         {category?.name ?? "-"}
-                      </span>
-                      <span className="text-xs md:text-sm text-gray-500">
+                      </Link>
+                      <span className="text-xs text-gray-500 md:text-sm">
                         {item.date
                           ? dayjs(item.date)
                               .locale("id")
@@ -212,7 +388,7 @@ export default function kegiatan() {
                           : "-"}
                       </span>
                     </div>
-                    <span
+                    <div
                       dangerouslySetInnerHTML={{
                         __html: item.excerpt.rendered,
                       }}
@@ -222,46 +398,15 @@ export default function kegiatan() {
                 </div>
               );
             })}
-          </div>
-          <div className="flex flex-col items-center md:flex-row md:justify-between">
-            <p className="order-2 text-xs text-black md:order-1 md:text-sm">
-              Halaman {page} dari {totalPages} • Total {total} Kegiatan
-            </p>
-            <div className="order-1 flex items-center gap-2 select-none md:order-2">
-              <div
-                className={cn(
-                  "flex items-center rounded pl-1 pr-2 py-0.5 text-sm transition-colors duration-250 md:text-base",
-                  page > 1
-                    ? "text-black hover:bg-gray-300"
-                    : "cursor-default text-gray-500",
-                )}
-              >
-                <ChevronLeft className="size-5 min-w-5" />
-                {page > 1 ? (
-                  <Link to={`?page=${page - 1}`}>Sebelumnya</Link>
-                ) : (
-                  <span>Sebelumnya</span>
-                )}
+            {dataFilter && data.length === 0 && (
+              <div className="grid h-72 w-full place-content-center sm:col-span-2 lg:col-span-3">
+                <span className="font-semibold text-gray-500">
+                  Kegiatan tidak ditemukan
+                </span>
               </div>
-              <div
-                className={cn(
-                  "flex items-center rounded pl-2 pr-1 py-0.5 text-sm transition-colors duration-250 md:text-base",
-                  page < totalPages
-                    ? "text-black hover:bg-gray-300"
-                    : "cursor-default text-gray-500",
-                )}
-              >
-                {page < totalPages ? (
-                  <Link to={`?page=${page + 1}`}>
-                    <span>Selanjutnya</span>
-                  </Link>
-                ) : (
-                  <span>Selanjutnya</span>
-                )}
-                <ChevronRight className="size-5 min-w-5" />
-              </div>
-            </div>
+            )}
           </div>
+          <Pagination page={page} total={total} totalPages={totalPages} />
         </section>
       </section>
     </>
