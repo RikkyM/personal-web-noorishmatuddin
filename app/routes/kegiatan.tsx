@@ -196,14 +196,14 @@ export default function kegiatan() {
                       dangerouslySetInnerHTML={{
                         __html: item?.title?.rendered,
                       }}
-                      className="line-clamp-2 font-semibold transition-colors duration-150 hover:text-yellow-500"
+                      className="line-clamp-2 font-semibold text-black transition-colors duration-150 hover:text-[#840000]"
                       title={item.title.rendered}
                     />
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="w-max bg-[#840000] px-3 py-1.5 text-xs text-white">
                         {category?.name ?? "-"}
                       </span>
-                      <span className="text-xs md:text-sm">
+                      <span className="text-xs md:text-sm text-gray-500">
                         {item.date
                           ? dayjs(item.date)
                               .locale("id")
@@ -211,11 +211,11 @@ export default function kegiatan() {
                           : "-"}
                       </span>
                     </div>
-                    <p
+                    <span
                       dangerouslySetInnerHTML={{
                         __html: item.excerpt.rendered,
                       }}
-                      className="mt-1.5 line-clamp-4 text-sm text-pretty md:mt-3.5"
+                      className="mt-1.5 line-clamp-4 text-sm text-pretty text-gray-500 md:mt-2"
                     />
                   </div>
                 </div>
@@ -223,15 +223,15 @@ export default function kegiatan() {
             })}
           </div>
           <div className="flex flex-col items-center md:flex-row md:justify-between">
-            <p className="order-2 text-xs md:order-1 md:text-sm">
+            <p className="order-2 text-xs text-black md:order-1 md:text-sm">
               Halaman {page} dari {totalPages} • Total {total} Kegiatan
             </p>
             <div className="order-1 flex items-center gap-2 select-none md:order-2">
               <div
                 className={cn(
-                  "flex items-center rounded px-2 py-0.5 text-sm transition-colors duration-250 md:text-base",
+                  "flex items-center rounded pl-1 pr-2 py-0.5 text-sm transition-colors duration-250 md:text-base",
                   page > 1
-                    ? "hover:bg-gray-300"
+                    ? "text-black hover:bg-gray-300"
                     : "cursor-default text-gray-400",
                 )}
               >
@@ -244,9 +244,9 @@ export default function kegiatan() {
               </div>
               <div
                 className={cn(
-                  "flex items-center rounded px-2 py-0.5 text-sm transition-colors duration-250 md:text-base",
+                  "flex items-center rounded pl-2 pr-1 py-0.5 text-sm transition-colors duration-250 md:text-base",
                   page < totalPages
-                    ? "hover:bg-gray-300"
+                    ? "text-black hover:bg-gray-300"
                     : "cursor-default text-gray-400",
                 )}
               >
