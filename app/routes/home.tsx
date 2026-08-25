@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { Link, useLoaderData, useRouteLoaderData } from "react-router";
+import { Link, useRouteLoaderData } from "react-router";
 import { fetchHome } from "~/features/homepage/api";
 import { socials } from "~/features/homepage/socials";
 import type { News } from "~/features/news/types";
@@ -26,8 +26,9 @@ export async function loader() {
   };
 }
 
-export default function Home() {
-  const initialData = useLoaderData<typeof loader>();
+export default function Home({
+  loaderData: initialData,
+}: Route.ComponentProps) {
   const rootData = useRouteLoaderData<typeof rootLoader>("root");
 
   const data = initialData?.home;
