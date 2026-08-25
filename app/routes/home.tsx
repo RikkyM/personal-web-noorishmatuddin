@@ -46,6 +46,8 @@ export default function Home() {
         <div className="absolute inset-0 bg-gray-700/60" />
         <img
           src={data?.heroImage?.link}
+          fetchPriority="high"
+          loading="eager"
           alt={data?.hero_title}
           className="absolute inset-x-0 -bottom-32 mx-auto max-h-160 min-h-140 object-cover object-center md:-bottom-20 md:h-150 lg:h-180"
         />

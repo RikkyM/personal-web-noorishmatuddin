@@ -93,22 +93,29 @@ export default function kegiatan() {
     ref.current?.showPicker();
   };
 
-  React.useEffect(() => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev);
+  // console.log('asd')
 
-      if (filters.date_from && filters.date_to) {
-        next.set("from", filters.date_from);
-        next.set("to", filters.date_to);
-      } else {
-        next.delete("from");
-        next.delete("to");
-      }
-      next.delete("page");
+  // React.useEffect(() => {
+  //   if (!filters.date_from || !filters.date_to) return;
 
-      return next;
-    });
-  }, [filters.date_from, filters.date_to, setSearchParams]);
+  //   setSearchParams(
+  //     (prev) => {
+  //       const next = new URLSearchParams(prev);
+
+  //       if (filters.date_from && filters.date_to) {
+  //         next.set("from", filters.date_from);
+  //         next.set("to", filters.date_to);
+  //         next.delete("page");
+  //       } else {
+  //         next.delete("from");
+  //         next.delete("to");
+  //       }
+
+  //       return next;
+  //     },
+  //     { replace: true },
+  //   );
+  // }, [filters.date_from, filters.date_to]);
 
   const clearFilters = () => {
     if (dateFromRef.current) dateFromRef.current.value = "";
@@ -149,7 +156,7 @@ export default function kegiatan() {
       <section className="overflow-hidden bg-white">
         <section className="mx-auto max-w-6xl space-y-3 px-3 py-10 text-sm md:px-5 md:text-base">
           <div className="flex flex-col gap-2.5">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-col flex-wrap gap-2 sm:flex-row sm:items-center">
               <div className="flex items-center gap-2">
                 <span className="text-black">Show:</span>
                 <label
@@ -160,7 +167,7 @@ export default function kegiatan() {
                   <select
                     name="per_page"
                     id="per_page"
-                    className="appearance-none text-center outline-none"
+                    className="appearance-none text-center text-black outline-none"
                     value={searchParams.get("per_page") ?? "6"}
                     onChange={(e) => {
                       setSearchParams((prev) => {
@@ -188,14 +195,14 @@ export default function kegiatan() {
               </div>
               <label
                 htmlFor="search"
-                className="relative flex w-full flex-1 items-center gap-2 overflow-clip border border-gray-400 pl-1.5"
+                className="relative flex w-full flex-1 items-center gap-2 border border-gray-400 pl-1.5"
               >
                 <Search className="size-5 min-w-5 stroke-2 text-black" />
                 <input
                   type="text"
                   id="search"
                   placeholder="Cari Kegiatan..."
-                  className="w-max flex-1 py-1.5 text-black outline-none placeholder:text-gray-400"
+                  className="w-full flex-1 py-1.5 text-black outline-none placeholder:text-gray-400"
                   value={filters.search ?? ""}
                   onChange={(e) =>
                     setFilters((prev) => ({ ...prev, search: e.target.value }))
@@ -219,7 +226,7 @@ export default function kegiatan() {
                 {filters.search && (
                   <button
                     type="button"
-                    className="h-full cursor-pointer bg-[#840000] px-2 py-1.5 text-white"
+                    className="h-full w-max cursor-pointer bg-[#840000] px-2 py-1.5 text-white"
                     onClick={() => {
                       setSearchParams((prev) => {
                         const next = new URLSearchParams(prev);
@@ -244,6 +251,7 @@ export default function kegiatan() {
                   name="kategori"
                   id="kategori"
                   className="w-full appearance-none p-1.5 text-black outline-none"
+                  value={searchParams.get("kategori") ?? ""}
                   onChange={(e) => {
                     setSearchParams((prev) => {
                       const value = e.target.value;
@@ -260,7 +268,9 @@ export default function kegiatan() {
                 >
                   <option value="">Pilih Kategori</option>
                   {categories.map((category) => (
-                    <option value={category.id}>{category?.name}</option>
+                    <option key={category.id} value={category.id}>
+                      {category?.name}
+                    </option>
                   ))}
                 </select>
                 <ChevronDown className="pointer-events-none absolute top-1/2 right-1.5 size-5 min-w-5 -translate-y-1/2 text-black" />
@@ -283,11 +293,29 @@ export default function kegiatan() {
                     ref={dateFromRef}
                     type="date"
                     id="date_from"
+                    // onChange={(e) => {
+                    //   setFilters((prev) => ({
+                    //     ...prev,
+                    //     date_from: e.target.value,
+                    //   }));
+                    // }}
                     onChange={(e) => {
-                      setFilters((prev) => ({
-                        ...prev,
-                        date_from: e.target.value,
-                      }));
+                      const value = e.target.value;
+                      setFilters((prev) => ({ ...prev, date_from: value }));
+
+                      // hanya update URL kalau dua-duanya (from & to) sudah terisi
+                      if (value && filters.date_to) {
+                        setSearchParams(
+                          (prev) => {
+                            const next = new URLSearchParams(prev);
+                            next.set("from", value);
+                            next.set("to", filters.date_to);
+                            next.delete("page");
+                            return next;
+                          },
+                          { replace: true },
+                        );
+                      }
                     }}
                     max={filters.date_to || undefined}
                     className="sr-only"
@@ -310,12 +338,29 @@ export default function kegiatan() {
                     ref={dateToRef}
                     type="date"
                     id="date_to"
-                    onChange={(e) =>
-                      setFilters((prev) => ({
-                        ...prev,
-                        date_to: e.target.value,
-                      }))
-                    }
+                    // onChange={(e) => {
+                    //   setFilters((prev) => ({
+                    //     ...prev,
+                    //     date_to: e.target.value,
+                    //   }));
+                    // }}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setFilters((prev) => ({ ...prev, date_to: value }));
+
+                      if (filters.date_from && value) {
+                        setSearchParams(
+                          (prev) => {
+                            const next = new URLSearchParams(prev);
+                            next.set("from", filters.date_from);
+                            next.set("to", value);
+                            next.delete("page");
+                            return next;
+                          },
+                          { replace: true },
+                        );
+                      }
+                    }}
                     min={filters.date_from || undefined}
                     className="sr-only"
                   />
@@ -399,8 +444,8 @@ export default function kegiatan() {
               );
             })}
             {dataFilter && data.length === 0 && (
-              <div className="grid h-72 w-full place-content-center sm:col-span-2 lg:col-span-3">
-                <span className="font-semibold text-gray-500">
+              <div className="grid h-72 w-full place-content-center overflow-clip sm:col-span-2 lg:col-span-3">
+                <span className="text-center font-semibold text-gray-500">
                   Kegiatan tidak ditemukan
                 </span>
               </div>

@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { cn } from "~/lib/utils";
 
 interface PaginationProps {
@@ -17,7 +17,7 @@ function getPaginationRange(
   total: number,
   siblingCount: number,
 ): (number | string)[] {
-  const totalNumbers = siblingCount * 2 + 5; // first + last + current + 2 siblings + 2 dots;
+  const totalNumbers = siblingCount * 2 + 5;
 
   if (total <= totalNumbers) {
     return Array.from({ length: total }, (_, i) => i + 1);
@@ -59,9 +59,17 @@ export default function Pagination({
   siblingCount = 1,
   className,
 }: PaginationProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   if (totalPages <= 1) return null;
 
   const range = getPaginationRange(page, totalPages, siblingCount);
+
+  const goToPage = (targetPage: number) => {
+    const next = new URLSearchParams(searchParams);
+    next.set("page", String(targetPage));
+    return `?${next.toString()}`;
+  };
 
   return (
     <div className="flex flex-col items-center gap-2 md:flex-row md:justify-between">
@@ -79,7 +87,7 @@ export default function Pagination({
         >
           <ChevronLeft className="size-5 min-w-5" />
           {page > 1 ? (
-            <Link to={`?page=${page - 1}`}>Sebelumnya</Link>
+            <Link to={goToPage(page - 1)}>Sebelumnya</Link>
           ) : (
             <span>Sebelumnya</span>
           )}
@@ -87,11 +95,13 @@ export default function Pagination({
         <div className="flex items-center gap-1">
           {range.map((item, i) =>
             item === DOTS ? (
-              <span key={`dots-${i}`}>{DOTS}</span>
+              <span key={`dots-${i}`} className="text-black">
+                {DOTS}
+              </span>
             ) : (
               <Link
                 key={item}
-                to={`?page=${item}`}
+                to={goToPage(item as number)}
                 className={cn(
                   "grid size-7.5 place-content-center rounded transition-colors duration-250",
                   item === page ? "bg-black text-white" : "text-black",
@@ -111,7 +121,7 @@ export default function Pagination({
           )}
         >
           {page < totalPages ? (
-            <Link to={`?page=${page + 1}`}>
+            <Link to={goToPage(page + 1)}>
               <span>Selanjutnya</span>
             </Link>
           ) : (
