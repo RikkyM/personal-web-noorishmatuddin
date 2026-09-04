@@ -18,11 +18,9 @@ import { createQueryClient } from "./lib/query-client";
 import "./styles/global.css";
 
 import dayjs from "dayjs";
-import 'dayjs/locale/id';
-// import relativeTime from 'dayjs/plugin/relativeTime'
+import "dayjs/locale/id";
 
 dayjs.locale("id");
-// dayjs.extend(relativeTime)
 
 export const links: Route.LinksFunction = () => [
   // { rel: "preconnect", href: "https://fonts.googleapis.com" },

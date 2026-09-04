@@ -93,30 +93,6 @@ export default function kegiatan() {
     ref.current?.showPicker();
   };
 
-  // console.log('asd')
-
-  // React.useEffect(() => {
-  //   if (!filters.date_from || !filters.date_to) return;
-
-  //   setSearchParams(
-  //     (prev) => {
-  //       const next = new URLSearchParams(prev);
-
-  //       if (filters.date_from && filters.date_to) {
-  //         next.set("from", filters.date_from);
-  //         next.set("to", filters.date_to);
-  //         next.delete("page");
-  //       } else {
-  //         next.delete("from");
-  //         next.delete("to");
-  //       }
-
-  //       return next;
-  //     },
-  //     { replace: true },
-  //   );
-  // }, [filters.date_from, filters.date_to]);
-
   const clearFilters = () => {
     if (dateFromRef.current) dateFromRef.current.value = "";
     if (dateToRef.current) dateToRef.current.value = "";
@@ -149,12 +125,12 @@ export default function kegiatan() {
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
-        <div className="relative mx-auto flex h-full max-w-6xl items-center">
+        <div className="relative mx-auto flex h-full max-w-7xl items-center">
           <h1 className="text-4xl font-bold text-white">KEGIATAN</h1>
         </div>
       </section>
       <section className="overflow-hidden bg-white">
-        <section className="mx-auto max-w-6xl space-y-3 px-3 py-10 text-sm md:px-5 md:text-base">
+        <section className="mx-auto max-w-7xl space-y-3 px-3 py-10 text-sm md:px-5 md:text-base">
           <div className="flex flex-col gap-2.5">
             <div className="flex flex-col flex-wrap gap-2 sm:flex-row sm:items-center">
               <div className="flex items-center gap-2">

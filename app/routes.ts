@@ -8,7 +8,7 @@ import {
 export default [
   layout("layouts/main-layout.tsx", [
     index("routes/home.tsx"),
-    // route("profil", "routes/profile.tsx"),
+    route("profil", "routes/profile.tsx"),
     route("kegiatan", "routes/kegiatan.tsx"),
     route("kegiatan/:slug", "routes/kegiatan.$slug.tsx"),
 

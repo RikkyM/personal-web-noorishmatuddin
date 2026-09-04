@@ -3,6 +3,7 @@ import { ArrowLeft, CalendarDays, Newspaper } from "lucide-react";
 import { useNavigate } from "react-router";
 import type { News } from "~/features/news/types";
 import { wpFetch } from "~/lib/api/client";
+import { cn } from "~/lib/utils";
 import type { Route } from "./+types/kegiatan.$slug";
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -51,27 +52,27 @@ export default function DetailKegiatan({
   return (
     <>
       <section>
-        <div className="mx-auto max-w-6xl py-5 md:py-10">
+        <div className="mx-auto max-w-7xl py-5 md:py-10">
           <div className="px-4 md:px-14">
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="flex items-center gap-2 cursor-pointer transition-colors duration-250 hover:bg-gray-300 px-2 py-1 rounded"
+              className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 transition-colors duration-250 hover:bg-gray-300"
             >
               <ArrowLeft className="size-5" />
               <span>Kembali</span>
             </button>
             <div className="mt-3">
-              <h1 className="text-center text-4xl font-bold text-[#991010]">
+              <h1 className="text-center font-bold text-[#991010] sm:text-xl md:text-2xl">
                 {data.title.rendered}
               </h1>
               <div className="flex flex-col justify-center gap-3 py-3 md:flex-row">
-                <p className="flex items-center gap-2 text-center">
-                  <Newspaper className="size-5 min-w-5" />
+                <p className="flex order-2 md:order-1 items-center justify-center gap-2 text-center text-xs md:justify-start md:text-sm">
+                  <Newspaper className="size-4 min-w-4 md:size-5 md:min-w-5" />
                   <span>{category?.name}</span>
                 </p>
-                <p className="flex items-center gap-2 text-center">
-                  <CalendarDays className="size-5 min-w-5" />
+                <p className="flex order-1 md:order-2 items-center justify-center gap-2 text-center text-xs md:justify-start md:text-sm">
+                  <CalendarDays className="size-4 min-w-4 md:size-5 md:min-w-5" />
                   <span>
                     {dayjs(data.date_gmt)
                       .locale("id")
@@ -83,7 +84,10 @@ export default function DetailKegiatan({
           </div>
           <div
             dangerouslySetInnerHTML={{ __html: data.content.rendered }}
-            className="space-y-7 [&_img]:mx-auto [&_img:first-of-type]:mt-5 [&_img:first-of-type]:mb-12 [&_p]:px-14"
+            className={cn(
+              "space-y-7 transition-colors duration-250",
+              "[&_a]:text-blue-500 [&_a]:hover:text-blue-700 [&_img]:mx-auto [&_img:first-of-type]:mt-5 [&_img:first-of-type]:mb-12 [&_p]:px-5 [&_p]:text-pretty [&_p]:md:px-14",
+            )}
           />
         </div>
       </section>

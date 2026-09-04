@@ -38,7 +38,7 @@ export default function Navbar() {
             <div className="h-full w-1/3 animate-[indicator_1.5s_ease-in-out_infinite] bg-[#840000]" />
           </div>
         )}
-        <nav className="relative mx-auto flex h-20 max-w-6xl justify-between px-5 py-2">
+        <nav className="relative mx-auto flex h-20 max-w-7xl justify-between px-5 py-2">
           <Link to="/" className="flex h-full w-max items-center">
             <img
               src="/logo.png"

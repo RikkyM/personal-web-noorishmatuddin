@@ -34,7 +34,7 @@ export default function Footer() {
   return (
     <footer className="font-georgia touch-pan-y border-t border-gray-50 bg-[#F5F1E8] shadow">
       <section className="mx-auto py-10">
-        <div className="mx-auto grid max-w-6xl gap-8 px-5 md:grid-cols-4 md:px-5">
+        <div className="mx-auto grid max-w-7xl gap-8 px-5 md:grid-cols-4 md:px-5">
           <div className="mx-auto md:mx-0 md:max-w-56">
             <img src="/logo.png" alt="logo" />
             <p className="font-medium text-pretty text-black md:text-sm">
