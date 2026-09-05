@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import ConnectWithMe from "~/components/shared/connect-with-me";
+import GridKegiatan from "~/components/shared/grid-kegiatan";
 import { fetchHome } from "~/features/homepage/api";
-import type { News } from "~/features/news/types";
 import { cn } from "~/lib/utils";
 import type { Route } from "./+types/home";
 
@@ -210,7 +210,9 @@ export default function Home({
         </div>
       </section>
 
-      <section className="overflow-hidden bg-white py-14 md:px-5 md:py-20">
+      <GridKegiatan news={data?.news} />
+
+      {/* <section className="overflow-hidden bg-white py-14 md:px-5 md:py-20">
         <div className="mx-auto max-w-7xl space-y-5">
           <div className="text-center md:text-left">
             <h1 className="text-lg font-semibold text-[#840000]">
@@ -269,7 +271,7 @@ export default function Home({
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

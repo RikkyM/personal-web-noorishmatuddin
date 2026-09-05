@@ -1,6 +1,9 @@
 import BgImage from "~/assets/images/kegiatan.jpg";
 import ProfileImg from "~/assets/images/profile.jpg";
+import ProfileImg2 from "~/assets/images/profile2.jpeg";
 import ConnectWithMe from "~/components/shared/connect-with-me";
+import GridKegiatan from "~/components/shared/grid-kegiatan";
+import { fetchNews } from "~/features/news/api";
 import { cn } from "~/lib/utils";
 import type { Route } from "./+types/profile";
 
@@ -15,7 +18,13 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export default function Profile() {
+export async function loader() {
+  const news = await fetchNews();
+
+  return news;
+}
+
+export default function Profile({ loaderData: news }: Route.ComponentProps) {
   return (
     <>
       <section
@@ -29,9 +38,9 @@ export default function Profile() {
           <h1 className="text-4xl font-bold text-white">PROFIL</h1>
         </div>
       </section>
-      <section className="bg-white py-7">
+      <section className="bg-white pt-7 pb-14">
         <div className="mx-auto flex max-w-7xl flex-col gap-7">
-          <div className="space-y-3 px-2 text-sm text-pretty md:text-base">
+          <div className="space-y-3 px-2 text-sm text-pretty">
             <p>
               Noor Ishmatuddin, S.I.P. (lahir di Betung, Kabupaten Banyuasin, 22
               April 1997) adalah seorang politisi muda Indonesia yang berasal
@@ -52,9 +61,9 @@ export default function Profile() {
         </div>
       </section>
       <section className="bg-white py-7">
-        <div className="flex max-w-7xl mx-auto flex-col gap-4 md:flex-row md:gap-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 md:gap-3 lg:flex-row lg:px-4">
           <div className="flex-1">
-            <div className="relative aspect-square max-h-72 w-full overflow-hidden md:sticky md:top-28 md:m-auto md:max-h-max md:w-full md:max-w-120">
+            <div className="relative aspect-square max-h-100 w-full overflow-hidden lg:sticky lg:top-28 lg:m-auto lg:max-h-max lg:w-full lg:max-w-120">
               <img
                 src={ProfileImg}
                 alt="profile"
@@ -62,16 +71,16 @@ export default function Profile() {
               />
             </div>
           </div>
-          <div className="flex-1 px-3">
+          <div className="flex-1 px-5">
             <h2
               className={cn(
-                "relative font-bold text-[#840000] text-xl mb-6",
-                'after:absolute after:-bottom-2 after:h-0.5 after:w-16 after:rounded-full after:bg-[#840000] after:content-[""] after:left-0',
+                "relative mb-6 text-xl font-semibold text-[#840000]",
+                'after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-16 after:rounded-full after:bg-[#840000] after:content-[""]',
               )}
             >
               Asal Usul
             </h2>
-            <div className="space-y-3 text-pretty text-sm md:text-base">
+            <div className="space-y-3 text-sm text-pretty text-gray-500">
               <p>
                 Noor Ishmatuddin, S.I.P. (lahir di Betung, Kabupaten Banyuasin,
                 22 April 1997) adalah seorang politisi muda Indonesia yang
@@ -125,6 +134,51 @@ export default function Profile() {
       </section>
 
       <ConnectWithMe />
+
+      <section className="bg-white py-7">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 md:gap-3 lg:flex-row lg:px-4">
+          <div className="flex-1">
+            <div className="md:sticky md:top-28 md:m-auto md:max-w-lg">
+              <img src={ProfileImg2} alt="karir" />
+            </div>
+          </div>
+          <div className="flex-1 px-5">
+            <h2
+              className={cn(
+                "relative mb-6 text-xl font-semibold text-[#840000]",
+                'after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-16 after:rounded-full after:bg-[#840000] after:content-[""]',
+              )}
+            >
+              Karier Politik
+            </h2>
+            <div className="space-y-3 text-sm text-pretty text-gray-500">
+              <p>
+                Karier politik Noor Ishmatuddin dibangun dari bawah, dimulai
+                sebagai kader Partai Gerindra di Kabupaten Banyuasin.
+                Dedikasinya di organisasi kepemudaan dan struktur partai
+                membawanya menempati sejumlah posisi strategis:
+              </p>
+              <ul className="list-inside list-disc">
+                <li>Ketua PC Satria Kabupaten Banyuasin (2016 – 2023)</li>
+                <li>Bendahara DPC Gerindra Banyuasin (2018 – 2022)</li>
+                <li>Sekretaris DPC Gerindra Banyuasin (2021 – Sekarang)</li>
+              </ul>
+              <p>
+                Momentum besar datang pada Pemilu 2019, ketika ia berhasil
+                terpilih sebagai anggota DPRD Kabupaten Banyuasin dan dipercaya
+                menjabat Wakil Ketua DPRD periode 2019–2024. Di usia 22 tahun,
+                ia tercatat sebagai salah satu pimpinan DPRD termuda di
+                Indonesia — sebuah pencapaian yang mencerminkan kepercayaan
+                publik terhadap kepemimpinan generasi muda. Kepercayaan itu
+                berlanjut pada Pemilu 2024, saat ia kembali terpilih sebagai
+                anggota DPRD Banyuasin untuk periode 2024–2029.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <GridKegiatan news={news} />
     </>
   );
 }
