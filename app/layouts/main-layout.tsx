@@ -4,8 +4,14 @@ import Footer from "~/components/shared/footer/footer";
 import Navbar from "~/components/shared/navbar";
 import type { Route } from "./+types/main-layout";
 
+const maintenance = import.meta.env.VITE_MAINTENANCE === 'true';
+
 export default function MainLayout() {
   const outlet = useOutlet();
+
+  if (maintenance) {
+    return <section className="h-dvh grid place-content-center">Maintenance</section>;
+  }
 
   return (
     <section className="relative h-dvh scrollbar-thin overflow-auto">
